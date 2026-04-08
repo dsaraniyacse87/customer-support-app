@@ -1,6 +1,7 @@
 # rag.py
 import os
 from typing import List
+from langchain.agents import Tool
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
@@ -38,6 +39,32 @@ def get_vectorstore() -> Chroma:
         docs = load_kb()
         return build_vectorstore(docs)
     
+
+def kb_search_tool(query: str) -> str:
+    """Search the KB vector store and return the top matching documents."""
+    vectordb = get_vectorstore()
+    retriever = vectordb.as_retriever(search_kwargs={"k": 3})
+    docs = retriever.get_relevant_documents(query)
+    if not docs:
+        return "No relevant KB documents found."
+
+    results = []
+    for i, doc in enumerate(docs, start=1):
+        source = doc.metadata.get("source", "unknown")
+        snippet = doc.page_content.strip().replace("\n", " ")
+        results.append(f"[{i}] Source: {source}\n{snippet[:800]}")
+
+    return "\n\n".join(results)
+
+
+def get_kb_search_tool() -> Tool:
+    return Tool(
+        name="kb_search",
+        func=kb_search_tool,
+        description="Search the knowledge base for relevant articles and return the top matching results.",
+    )
+
+
 def get_rag_chain():
     vectordb = get_vectorstore()
     retriever = vectordb.as_retriever(search_kwargs={"k": 4})

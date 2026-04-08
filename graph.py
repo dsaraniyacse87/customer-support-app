@@ -1,9 +1,10 @@
 # graph.py 
 from typing import Dict, Any, TypedDict
 from langgraph.graph import StateGraph, END
+from langchain.agents import Tool, initialize_agent
 from langchain_openai import ChatOpenAI
 
-from rag import get_rag_chain
+from rag import get_rag_chain, get_kb_search_tool
 from servicenow_client import create_servicenow_ticket
 
 # ---- Shared state type ----
@@ -32,6 +33,13 @@ class SupportState(TypedDict, total=False):
 
 _llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 _rag_chain = get_rag_chain()
+_kb_tool = get_kb_search_tool()
+_tool_agent = initialize_agent(
+    tools=[_kb_tool],
+    llm=_llm,
+    agent="zero-shot-react-description",
+    verbose=False,
+)
 
 # ---- Agent 1: Customer Question / Intent Agent ----
 
@@ -63,7 +71,7 @@ def intake_agent(state: SupportState) -> SupportState:
         state["should_create_ticket"] = False
 
     return state
-    
+
 # ---- Agent: Clarification Agent ----
 
 def clarification_agent(state: SupportState) -> SupportState:
@@ -118,24 +126,14 @@ Respond as JSON:
 # ---- Agent 2: RAG Answering Agent ----
 
 def rag_agent(state: SupportState) -> SupportState:
-    """Use RAG over KB to answer the question."""
-    # Prefer clarified_message if set, otherwise fallback to original.
+    """Use a LangChain agent with a KB search tool to answer the question."""
     user_message = state.get("clarification_message") or state["user_message"]
 
-    result = _rag_chain(
-        {
-            "query": user_message
-        }
-    )
-    answer = result["result"]
-    sources = result.get("source_documents", [])
-
-    src_strs = []
-    for i, d in enumerate(sources):
-        src_strs.append(f"[{i+1}] {d.metadata.get('source', 'unknown')}")
+    # Run the tool-enabled agent over the user query.
+    answer = _tool_agent.run(user_message)
 
     state["rag_answer"] = answer
-    state["rag_sources"] = "\n".join(src_strs)
+    state["rag_sources"] = "Tool-based KB search result"
     return state
 
 # ---- Agent 3: Summary Agent ----
@@ -217,9 +215,9 @@ Respond as JSON:
     except Exception:
         pass
 
-        state["assignment_group"] = assignment_group
-        state["category"] = category
-        state["subcategory"] = subcategory
+    state["assignment_group"] = assignment_group
+    state["category"] = category
+    state["subcategory"] = subcategory
 
     return state
 

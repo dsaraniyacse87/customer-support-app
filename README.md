@@ -14,6 +14,7 @@ A sophisticated multi-agent AI-powered customer support system built with LangGr
 
 ### Advanced Capabilities
 - **Retrieval-Augmented Generation (RAG)**: Leverages ChromaDB vector store for semantic search of knowledge base
+- **Tool-Based Agent Integration**: Uses a LangChain agent with a custom KB search tool for structured knowledge retrieval
 - **Intelligent Ticket Creation**: Automatically determines when tickets should be created based on request complexity
 - **Evaluation Framework**: Built-in metrics to assess answer quality, summary accuracy, and routing decisions
 - **Docker Support**: Containerized deployment for easy scaling and portability
@@ -38,6 +39,8 @@ A sophisticated multi-agent AI-powered customer support system built with LangGr
           │ ServiceNow Agent│
           │ (Ticket Creation)│
           └─────────────────┘
+
+> The RAG Answering Agent now uses a LangChain agent backed by a custom knowledge-base search tool, allowing more structured KB retrieval.
 ```
 
 ## 📋 Prerequisites
