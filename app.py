@@ -120,8 +120,8 @@ This tab runs a small evaluation suite over sythetic test cases and reports:
         st.subheader("Aggregate Metrics")
         st.metric("Average Answer Score (1-5)", f"{agg['avg_answer_score_1to5']:.2f}")
         st.metric("Average Summary Score (1-5)", f"{agg['avg_summary_score_1to5']:.2f}")
-        st.metric("Ticket Decision Accuracy", f"{agg['ticket_accuracy']*100:.1f}")
-        # st.metric("Routing Accuracy", f"{agg['routing_accuracy']:.2f}")
+        st.metric("Ticket Decision Accuracy", f"{agg['ticket_accuracy']*100:.1f}%")
+        st.metric("Routing Accuracy", f"{agg['routing_accuracy']*100:.1f}%")
         st.write(f"Number of cases: {agg['num_cases']}")
 
         st.subheader("Per-Case Details")
@@ -147,8 +147,24 @@ This tab runs a small evaluation suite over sythetic test cases and reports:
                 st.write(
                     f"**Ticket Decision Correct?** predicted: {c['pred_should_ticket']} "
                     f"| true: {c['true_should_ticket']} | "
-                    f"| correct: {c['ticket_decision_correct']}"
+                    f"correct: {c['ticket_decision_correct']}"
                     # f"**Routing Correct?** predicted: {c['predicted_routing']} | "
                     # f"true: {c['true_routing']} | "
                     # f"correct: {c['routing_correct']}"
+                )
+                st.write("**Routing Predictions:**")
+                st.write(
+                    f"Assignment Group: predicted: {c.get('pred_assignment_group', '')} | "
+                    f"true: {c.get('true_assignment_group', '')} | "
+                    f"correct: {c.get('routing_group_correct', '')}"
+                )
+                st.write(
+                    f"Category: predicted: {c.get('pred_category', '')} | "
+                    f"true: {c.get('true_category', '')} | "
+                    f"correct: {c.get('routing_category_correct', '')}"
+                )
+                st.write(
+                    f"Subcategory: predicted: {c.get('pred_subcategory', '')} | "
+                    f"true: {c.get('true_subcategory', '')} | "
+                    f"correct: {c.get('routing_subcategory_correct', '')}"
                 )

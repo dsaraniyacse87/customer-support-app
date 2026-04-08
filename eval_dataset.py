@@ -16,6 +16,9 @@ def get_eval_cases() -> List[Dict[str, Any]]:
             "user_message": "I can't login into the customer portal, it says 'invalid token' every time.",
             "expected_hints_answers": "Explain how to clear browser cache and cookies, and provide a link to the portal. Try to reset login, and mention token inquiry.",
             "should_create_ticket": False,
+            "expected_assignment_group": "Identity & Access",
+            "expected_category": "access",
+            "expected_subcategory": "portal login",
             "notes": "Simple FAQ/troubleshooting, should not create ticket by default."
         },
         {
@@ -23,6 +26,9 @@ def get_eval_cases() -> List[Dict[str, Any]]:
             "user_message": "My credit card payment failed twice today, and I see no confirmation email. Can you check?",
             "expected_hints_answers": "Explain common payment failure reasons and checking transaction history. Might need ticket.",
             "should_create_ticket": True,
+            "expected_assignment_group": "Billing Support",
+            "expected_category": "billing",
+            "expected_subcategory": "payment failure",
             "notes": "This is a billing issue that requires further investigation."
         },
         {
@@ -30,6 +36,9 @@ def get_eval_cases() -> List[Dict[str, Any]]:
             "user_message": "Our entire team cannot access the VPN and all services are down. This is urgent!",
             "expected_hints_answers": "Acknowledge the outage, suggest basic checks, escalate and immediately create a ticket for urgent handling.",
             "should_create_ticket": True,
+            "expected_assignment_group": "Network Operation",
+            "expected_category": "network",
+            "expected_subcategory": "outage",
             "notes": "Urgent outage scenario, should always create ticket with high priority."
         },
         # Add more cases as needed for evaluation

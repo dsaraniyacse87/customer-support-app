@@ -65,6 +65,9 @@ def get_kb_search_tool() -> Tool:
     )
 
 
+kb_search_tool = get_kb_search_tool()
+
+
 def get_rag_chain():
     vectordb = get_vectorstore()
     retriever = vectordb.as_retriever(search_kwargs={"k": 4})
