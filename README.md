@@ -177,6 +177,52 @@ streamlit run app.py
 - **Aggregate Metrics**: Average scores and accuracy percentages
 - **Per-Case Details**: Individual case analysis with predicted/true values for routing decisions
 
+## 🧪 Testing
+
+The project includes comprehensive unit tests for all major components.
+
+### Running Tests
+
+1. **Install test dependencies**
+   ```bash
+   pip install -r requirements-test.txt
+   ```
+
+2. **Run all tests**
+   ```bash
+   pytest
+   ```
+
+3. **Run specific test file**
+   ```bash
+   pytest tests/test_rag.py
+   ```
+
+4. **Run with coverage**
+   ```bash
+   pytest --cov=.
+   ```
+
+### Test Coverage
+
+- **RAG System**: Knowledge base loading, search functionality, and tool integration
+- **Evaluation Metrics**: Scoring functions, routing validation, and quality pipeline
+- **ServiceNow Client**: Mock ticket creation and response handling
+- **Graph Agents**: Individual agent functions and state management
+- **Evaluation Dataset**: Test case structure and data validation
+
+### Test Structure
+
+```
+tests/
+├── test_rag.py          # RAG and knowledge base tests
+├── test_evaluation.py   # Evaluation metrics and pipeline tests
+├── test_servicenow.py   # ServiceNow client tests
+├── test_graph.py        # Graph agent function tests
+├── test_eval_dataset.py # Evaluation dataset tests
+└── __init__.py
+```
+
 ## 🔍 Key Components
 
 ### RAG Implementation
